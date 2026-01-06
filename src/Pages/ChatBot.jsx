@@ -13,7 +13,7 @@ const demoAnswers = [
   },
   {
     match: ['api', 'backend', 'server'],
-    reply: 'API calls are routed through the central client. In demo mode, responses come from local mock data—no backend needed.',
+    reply: 'API calls are routed through a central client. In demo mode, responses come from local mock data—no backend needed.',
   },
   {
     match: ['alerts', 'health', 'status'],
@@ -21,7 +21,7 @@ const demoAnswers = [
   },
   {
     match: ['logout', 'sign out'],
-    reply: 'Use the user menu or the sign-out page. In demo mode, browsing works even without logging in.',
+    reply: 'Use the sign-out page from the menu. In demo mode, browsing works even without logging in.',
   },
 ];
 
@@ -44,18 +44,17 @@ const getDemoReply = (question) => {
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
-    { sender: 'bot', text: '👋 Hello! I’m your DAMSBF demo assistant. Ask me about login, mock data, or system status.' },
+    { sender: 'bot', text: '👋 Hi! I’m your DAMSBF demo assistant. Ask me about login, mock data, or system status.' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const sendMessage = (text) => {
+  const handleSend = async (text) => {
     if (!text.trim()) return;
     const userMsg = { sender: 'user', text };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
-    // Simulated response (offline)
     setTimeout(() => {
       const botReply = getDemoReply(text);
       setMessages((prev) => [...prev, { sender: 'bot', text: botReply }]);
@@ -63,10 +62,15 @@ const ChatBot = () => {
     }, 400);
   };
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    sendMessage(input);
+  const onSendClick = () => {
+    const text = input;
     setInput('');
+    handleSend(text);
+  };
+
+  const handleQuickPrompt = (prompt) => {
+    setInput('');
+    handleSend(prompt);
   };
 
   return (
@@ -113,11 +117,11 @@ const ChatBot = () => {
               className="flex-1 rounded-full px-4 py-2 text-black bg-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Ask me about the demo (e.g., login, mock data, health)..."
+              onKeyDown={(e) => e.key === 'Enter' && onSendClick()}
+              placeholder="Ask me about DAMSBF (login, mock data, health)..."
             />
             <button
-              onClick={handleSend}
+              onClick={onSendClick}
               className="bg-cyan-600 hover:bg-cyan-700 transition text-white px-4 py-2 rounded-full disabled:opacity-60 flex items-center gap-2"
               disabled={loading}
             >
@@ -155,7 +159,7 @@ const ChatBot = () => {
               {quickPrompts.map((prompt) => (
                 <button
                   key={prompt}
-                  onClick={() => sendMessage(prompt)}
+                  onClick={() => handleQuickPrompt(prompt)}
                   className="text-left w-full px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-sm transition"
                 >
                   {prompt}
@@ -164,9 +168,9 @@ const ChatBot = () => {
             </div>
           </div>
 
-          <div className="text-xs text-slate-200/70">
-            Tips:
-            <ul className="list-disc list-inside space-y-1 mt-2">
+          <div className="text-xs text-slate-200/70 space-y-2">
+            <p>Tips:</p>
+            <ul className="list-disc list-inside space-y-1">
               <li>Ask about login, mock data, API, or health.</li>
               <li>No API key needed; everything is local.</li>
               <li>Use demo credentials: 0000 / 0000.</li>

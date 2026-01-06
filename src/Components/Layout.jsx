@@ -1,6 +1,7 @@
 // src/components/Layout.jsx
 import React, { useState } from "react";
 import Navbar from "./Navbar";
+import ChatAssistant from "./ChatAssistant";
 import { Box, CssBaseline, styled, useMediaQuery, useTheme, Drawer as MuiDrawer } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import { Outlet, useLocation } from "react-router-dom";
@@ -127,7 +128,7 @@ function Layout() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      <Box sx={{ display: "flex", height: "100vh", overflow: "hidden", position: 'relative' }}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -176,6 +177,9 @@ function Layout() {
             <Outlet />
           </Box>
         </Main>
+
+        {/* Global floating chat assistant (bottom-right FAB) */}
+        <ChatAssistant />
       </Box>
     </LocalizationProvider>
   );
