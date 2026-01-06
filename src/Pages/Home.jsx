@@ -289,10 +289,11 @@ function Home() {
           }}
         >
           {cardData.map((card) => (
-            <Grid item xs={12} sm={6} md={4} key={card.name} sx={{ width: '100%' }}>
+            <Grid item xs={12} sm={6} md={4} key={card.name} sx={{ width: '100%', position: 'relative', zIndex: hoveredCard === card.name ? 1000 : 1 }}>
               <Box ref={(el) => (cardRefs.current[card.name] = el)} sx={{ 
                 perspective: { xs: 0, sm: 1200 },
                 width: '100%',
+                position: 'relative',
               }}>
                 <Paper
                   elevation={0}
@@ -314,6 +315,7 @@ function Home() {
                       xs: "scale(1)", 
                       sm: "scale(1.045) translateY(-10px)" 
                     } : "scale(1)",
+                    zIndex: hoveredCard === card.name ? 1000 : 1,
                     ...(hoveredCard === card.name
                       ? { boxShadow: { xs: baseShadow, sm: activeShadow } }
                       : { boxShadow: baseShadow }),
@@ -376,11 +378,11 @@ function Home() {
                         mt: { xs: 1, sm: 2 },
                         minWidth: { xs: 'calc(100% - 16px)', sm: 200 },
                         maxWidth: { xs: 'calc(100% - 16px)', sm: 250 },
-                        background: "rgba(255,255,255,0.85)",
+                        background: "rgba(255,255,255,0.95)",
                         borderRadius: { xs: 2, sm: 4 },
-                        boxShadow: "0 8px 32px 0 rgba(253,160,133,0.18)",
+                        boxShadow: "0 8px 32px 0 rgba(253,160,133,0.3)",
                         border: "2px solid #fda085",
-                        zIndex: 100,
+                        zIndex: 9999,
                         py: { xs: 0.5, sm: 1 },
                         px: { xs: 0.25, sm: 0.5 },
                         backdropFilter: "blur(6px)",
