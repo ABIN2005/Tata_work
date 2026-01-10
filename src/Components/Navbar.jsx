@@ -11,12 +11,18 @@ import {
   Box,
   Avatar,
   IconButton,
-  Toolbar
+  Toolbar,
+  Menu,
+  MenuItem,
+  Divider
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
 import { styled, alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../Context/AppContext';
 import routes from '../routes/routes'; // dynamic routes import
 
 // Styled components
@@ -85,9 +91,29 @@ function Navbar({ handleDrawerToggle, isMobile = false }) {
   const [myVisits, setMyVisits] = useState(0);
   const [totalVisits, setTotalVisits] = useState(0);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const hasVisitedRef = useRef(false);
   const navigate = useNavigate();
-  const userName = 'Lisa Das';
+  const { user, logout, isAuthenticated } = useAppContext();
+  
+  // Get user name from context, with fallbacks
+  const userName = user?.name || user?.username || localStorage.getItem('username') || 'User';
+  
+  // User menu handlers
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
+    const basename = import.meta.env.PROD ? '/DAMSBF' : '';
+    navigate(`${basename}/login`);
+  };
 
   // Dynamically derive valid pages from routes
   const pages = routes
@@ -237,27 +263,85 @@ function Navbar({ handleDrawerToggle, isMobile = false }) {
           mt: { xs: 1, md: 0 },
         }}
       >
-        {/* User Info - Hidden on very small screens */}
+        {/* User Info with Menu - Hidden on very small screens */}
         <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1 }}>
-          <Avatar sx={{ 
-            bgcolor: '#fff', 
-            color: '#004C97', 
-            fontSize: { xs: '12px', sm: '14px' }, 
-            width: { xs: 28, sm: 32 }, 
-            height: { xs: 28, sm: 32 } 
-          }}>
-            {userName?.[0] || 'U'}
-          </Avatar>
-          <Typography 
-            variant="body1" 
+          <Box 
             sx={{ 
-              fontWeight: 500,
-              display: { xs: 'none', md: 'block' },
-              fontSize: { xs: '0.75rem', sm: '0.875rem' },
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1, 
+              cursor: 'pointer',
+              borderRadius: '50px',
+              padding: '4px 8px',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              },
+              transition: 'background-color 0.2s',
+            }}
+            onClick={handleMenuOpen}
+          >
+            <Avatar sx={{ 
+              bgcolor: '#fff', 
+              color: '#004C97', 
+              fontSize: { xs: '12px', sm: '14px' }, 
+              width: { xs: 28, sm: 32 }, 
+              height: { xs: 28, sm: 32 },
+              cursor: 'pointer',
+            }}>
+              {userName?.[0] || 'U'}
+            </Avatar>
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                fontWeight: 500,
+                display: { xs: 'none', md: 'block' },
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+              }}
+            >
+              {userName}
+            </Typography>
+          </Box>
+          
+          {/* User Menu Dropdown */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            PaperProps={{
+              sx: {
+                mt: 1.5,
+                minWidth: 200,
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              },
             }}
           >
-            {userName}
-          </Typography>
+            <MenuItem disabled>
+              <PersonIcon sx={{ mr: 1.5, fontSize: 20 }} />
+              <Box>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  {userName}
+                </Typography>
+                {user?.email && (
+                  <Typography variant="caption" color="text.secondary">
+                    {user.email}
+                  </Typography>
+                )}
+              </Box>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
+              <LogoutIcon sx={{ mr: 1.5, fontSize: 20 }} />
+              Logout
+            </MenuItem>
+          </Menu>
         </Box>
 
         {/* Stats - Hidden on mobile */}

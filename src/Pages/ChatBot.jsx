@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Bot, User, Sparkles, ShieldCheck, Cpu, Send, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Bot, User, Sparkles, ShieldCheck, Cpu, Send, Loader2, Copy, Check, X, Zap, MessageSquare } from 'lucide-react';
 
 // Local demo knowledge base (no network required)
 const demoAnswers = [
@@ -129,11 +129,27 @@ const demoAnswers = [
 ];
 
 const quickPrompts = [
-  'How do I log in for the demo?',
-  'Show me current system health',
-  'How is mock data configured?',
-  'Explain the API client briefly',
+  { text: 'What is DAMSBF?', icon: '💡' },
+  { text: 'How do I log in?', icon: '🔐' },
+  { text: 'Show me system health', icon: '📊' },
+  { text: 'What are the features?', icon: '✨' },
+  { text: 'How do I navigate?', icon: '🗺️' },
+  { text: 'Tell me about the team', icon: '👥' },
 ];
+
+// Format markdown-like text
+const formatMessage = (text) => {
+  return text
+    .split('\n')
+    .map((line, idx) => {
+      // Bold text
+      line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      // Code blocks
+      line = line.replace(/`(.*?)`/g, '<code class="bg-white/20 px-1.5 py-0.5 rounded text-cyan-200 font-mono text-xs">$1</code>');
+      return line;
+    })
+    .join('\n');
+};
 
 const getDemoReply = (question) => {
   const q = question.toLowerCase();
@@ -142,25 +158,50 @@ const getDemoReply = (question) => {
       return item.reply;
     }
   }
-  return "Here’s a quick demo overview: I’m running offline with mock data. Ask me about login, mock data, or system health.";
+  return "Here's a quick demo overview: I'm running offline with mock data. Ask me about login, mock data, or system health.";
 };
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
-    { sender: 'bot', text: '👋 Hi! I’m your DAMSBF demo assistant. Ask me about login, mock data, or system status.' },
+    { 
+      sender: 'bot', 
+      text: '👋 Hi! I\'m your DAMSBF assistant. I can help you with:\n\n• Login & navigation\n• System status & health\n• Equipment information\n• Features & capabilities\n• Team details\n• Technical questions\n\nWhat would you like to know?',
+      timestamp: new Date(),
+    },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, loading]);
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleSend = async (text) => {
     if (!text.trim()) return;
-    const userMsg = { sender: 'user', text };
+    const userMsg = { 
+      sender: 'user', 
+      text: text.trim(),
+      timestamp: new Date(),
+    };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
     setTimeout(() => {
       const botReply = getDemoReply(text);
-      setMessages((prev) => [...prev, { sender: 'bot', text: botReply }]);
+      setMessages((prev) => [...prev, { 
+        sender: 'bot', 
+        text: botReply,
+        timestamp: new Date(),
+      }]);
       setLoading(false);
     }, 400);
   };
@@ -176,112 +217,271 @@ const ChatBot = () => {
     handleSend(prompt);
   };
 
+  const handleCopy = (text, id) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const formatTime = (date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(date);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl grid md:grid-cols-[2fr_1fr] gap-4">
+      <div className="w-full max-w-6xl grid lg:grid-cols-[1.8fr_1fr] gap-4">
         {/* Chat panel */}
-        <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl shadow-2xl p-6 h-[640px] flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-10 w-10 rounded-full bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center">
-              <Sparkles size={18} className="text-cyan-300" />
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-6 h-[700px] flex flex-col relative overflow-hidden">
+          {/* Animated background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse pointer-events-none" />
+          
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-4 relative z-10 pb-4 border-b border-white/10">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-cyan-500/30 to-emerald-500/30 border-2 border-cyan-400/50 flex items-center justify-center shadow-lg">
+              <Sparkles size={20} className="text-cyan-300 animate-pulse" />
             </div>
-            <div>
-              <h2 className="text-lg font-semibold leading-tight">DAMSBF Demo Assistant</h2>
-              <p className="text-xs text-slate-200/80">Offline, mock-data responses. No API key required.</p>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold leading-tight bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">
+                DAMSBF Assistant
+              </h2>
+              <p className="text-xs text-slate-300 flex items-center gap-1 mt-0.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                Online • Ready to help
+              </p>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto mb-4 space-y-3 pr-2 scrollbar-thin scrollbar-thumb-slate-500/70">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`flex items-start gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'bot' && <Bot size={18} className="mt-1 text-cyan-300 shrink-0" />}
+          {/* Messages container */}
+          <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2 scrollbar-thin scrollbar-thumb-cyan-500/50 scrollbar-track-transparent relative z-10">
+            {messages.map((msg, idx) => {
+              const msgId = `${msg.sender}-${idx}`;
+              const isUser = msg.sender === 'user';
+              return (
                 <div
-                  className={`px-4 py-2 rounded-xl text-sm max-w-[75%] leading-relaxed ${
-                    msg.sender === 'bot'
-                      ? 'bg-gradient-to-r from-cyan-800 to-cyan-700 text-white shadow-lg'
-                      : 'bg-emerald-500 text-white shadow-md'
+                  key={idx}
+                  className={`flex items-start gap-3 animate-fadeIn ${
+                    isUser ? 'flex-row-reverse' : 'flex-row'
                   }`}
+                  style={{ animationDelay: `${idx * 0.1}s` }}
                 >
-                  {msg.text}
+                  {/* Avatar */}
+                  <div
+                    className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 ${
+                      isUser
+                        ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg'
+                        : 'bg-gradient-to-br from-cyan-500 to-cyan-600 shadow-lg'
+                    }`}
+                  >
+                    {isUser ? (
+                      <User size={16} className="text-white" />
+                    ) : (
+                      <Bot size={16} className="text-white" />
+                    )}
+                  </div>
+
+                  {/* Message bubble */}
+                  <div className={`flex flex-col gap-1 max-w-[75%] ${isUser ? 'items-end' : 'items-start'}`}>
+                    <div
+                      className={`group relative px-4 py-3 rounded-2xl ${
+                        isUser
+                          ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg rounded-br-sm'
+                          : 'bg-gradient-to-br from-slate-700/90 to-slate-800/90 text-slate-100 shadow-lg rounded-bl-sm border border-white/10'
+                      }`}
+                    >
+                      <div
+                        className="text-sm leading-relaxed whitespace-pre-wrap break-words"
+                        dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }}
+                      />
+                      
+                      {/* Copy button */}
+                      <button
+                        onClick={() => handleCopy(msg.text, msgId)}
+                        className={`absolute top-2 ${
+                          isUser ? 'left-2' : 'right-2'
+                        } opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg bg-black/20 hover:bg-black/40`}
+                        title="Copy message"
+                      >
+                        {copiedId === msgId ? (
+                          <Check size={14} className="text-emerald-300" />
+                        ) : (
+                          <Copy size={14} className="text-slate-300" />
+                        )}
+                      </button>
+                    </div>
+                    
+                    {/* Timestamp */}
+                    <span className="text-xs text-slate-400 px-2">
+                      {formatTime(msg.timestamp)}
+                    </span>
+                  </div>
                 </div>
-                {msg.sender === 'user' && <User size={18} className="mt-1 text-emerald-200 shrink-0" />}
-              </div>
-            ))}
+              );
+            })}
+            
+            {/* Typing indicator */}
             {loading && (
-              <div className="flex items-center gap-2 text-cyan-200 text-sm">
-                <Loader2 className="animate-spin" size={16} />
-                Thinking...
+              <div className="flex items-start gap-3 animate-fadeIn">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center shrink-0 shadow-lg">
+                  <Bot size={16} className="text-white" />
+                </div>
+                <div className="bg-gradient-to-br from-slate-700/90 to-slate-800/90 px-4 py-3 rounded-2xl rounded-bl-sm border border-white/10 shadow-lg">
+                  <div className="flex gap-1.5">
+                    <div className="h-2 w-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0s' }} />
+                    <div className="h-2 w-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    <div className="h-2 w-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0.4s' }} />
+                  </div>
+                </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
 
-          <div className="flex gap-2">
-            <input
-              className="flex-1 rounded-full px-4 py-2 text-black bg-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && onSendClick()}
-              placeholder="Ask me anything about DAMSBF..."
-            />
-            <button
-              onClick={onSendClick}
-              className="bg-cyan-600 hover:bg-cyan-700 transition text-white px-4 py-2 rounded-full disabled:opacity-60 flex items-center gap-2"
-              disabled={loading}
-            >
-              {loading ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
-              {loading ? 'Sending' : 'Send'}
-            </button>
+          {/* Input area */}
+          <div className="relative z-10">
+            <div className="flex gap-2 items-end">
+              <div className="flex-1 relative">
+                <textarea
+                  ref={inputRef}
+                  className="w-full rounded-2xl px-4 py-3 pr-12 text-black bg-white/95 focus:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-400 resize-none min-h-[48px] max-h-[120px] text-sm"
+                  value={input}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    e.target.style.height = 'auto';
+                    e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      onSendClick();
+                    }
+                  }}
+                  placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
+                  rows={1}
+                />
+                <div className="absolute right-3 bottom-3 text-xs text-slate-500">
+                  {input.length > 0 && `${input.length} chars`}
+                </div>
+              </div>
+              <button
+                onClick={onSendClick}
+                disabled={loading || !input.trim()}
+                className="bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-700 hover:to-emerald-700 transition-all text-white px-5 py-3 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" size={18} />
+                    <span className="hidden sm:inline">Sending</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    <span className="hidden sm:inline">Send</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="flex items-center justify-between mt-2 text-xs text-slate-400">
+              <span>💡 Tip: Ask about login, navigation, or system status</span>
+              <span>Press Enter to send</span>
+            </div>
           </div>
         </div>
 
-        {/* Info & quick prompts */}
-        <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-2xl shadow-2xl p-6 space-y-4 h-[640px]">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center">
-              <ShieldCheck size={22} className="text-emerald-200" />
+        {/* Sidebar */}
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-6 space-y-5 h-[700px] overflow-y-auto scrollbar-thin scrollbar-thumb-cyan-500/50">
+          {/* Status cards */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 border border-emerald-400/30">
+              <div className="h-10 w-10 rounded-lg bg-emerald-500/30 border border-emerald-400/50 flex items-center justify-center">
+                <ShieldCheck size={20} className="text-emerald-200" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold">Offline Mode</h3>
+                <p className="text-xs text-slate-300">Local responses</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-base font-semibold">Offline demo mode</h3>
-              <p className="text-xs text-slate-200/80">Responses are local; no network needed.</p>
+
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-indigo-500/20 to-indigo-600/20 border border-indigo-400/30">
+              <div className="h-10 w-10 rounded-lg bg-indigo-500/30 border border-indigo-400/50 flex items-center justify-center">
+                <Cpu size={20} className="text-indigo-200" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold">Mock Data</h3>
+                <p className="text-xs text-slate-300">Demo responses</p>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center">
-              <Cpu size={22} className="text-indigo-200" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold">Mock data ready</h3>
-              <p className="text-xs text-slate-200/80">Set `VITE_USE_MOCK_DATA=true` for full offline experience.</p>
-            </div>
-          </div>
-
+          {/* Quick prompts */}
           <div>
-            <h4 className="text-sm font-semibold mb-2">Quick prompts</h4>
+            <div className="flex items-center gap-2 mb-3">
+              <Zap size={16} className="text-cyan-400" />
+              <h4 className="text-sm font-semibold">Quick Prompts</h4>
+            </div>
             <div className="grid gap-2">
-              {quickPrompts.map((prompt) => (
+              {quickPrompts.map((prompt, idx) => (
                 <button
-                  key={prompt}
-                  onClick={() => handleQuickPrompt(prompt)}
-                  className="text-left w-full px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-sm transition"
+                  key={idx}
+                  onClick={() => handleQuickPrompt(prompt.text)}
+                  className="text-left w-full px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm transition-all hover:border-cyan-400/50 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 group"
                 >
-                  {prompt}
+                  <span className="text-lg group-hover:scale-110 transition-transform">
+                    {prompt.icon}
+                  </span>
+                  <span className="flex-1">{prompt.text}</span>
+                  <MessageSquare size={14} className="opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="text-xs text-slate-200/70 space-y-2">
-            <p>Tips:</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Ask about login, navigation, system status, or features.</li>
-              <li>No API key needed; everything is local.</li>
-              <li>Try: "What is DAMSBF?" or "Show me system health"</li>
-              <li>Use demo credentials: 0000 / 0000.</li>
+          {/* Tips */}
+          <div className="p-4 rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10">
+            <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
+              <Sparkles size={14} className="text-cyan-400" />
+              Tips
+            </h4>
+            <ul className="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+              <li>Ask about login, navigation, or features</li>
+              <li>Use quick prompts for faster responses</li>
+              <li>Copy messages by hovering over them</li>
+              <li>Demo credentials: 0000 / 0000</li>
             </ul>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background: rgba(6, 182, 212, 0.5);
+          border-radius: 3px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+          background: rgba(6, 182, 212, 0.7);
+        }
+      `}</style>
     </div>
   );
 };

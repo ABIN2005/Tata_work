@@ -1,13 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../Context/AppContext';
 import backgroundImage from '../assets/tata-steel.png';
 
 const SignOutPage = () => {
   const navigate = useNavigate();
+  const { logout } = useAppContext();
 
   const handleConfirm = () => {
-    localStorage.removeItem('isLoggedIn');
-    navigate('/signedout');
+    logout();
+    const basename = import.meta.env.PROD ? '/DAMSBF' : '';
+    navigate(`${basename}/signedout`);
   };
 
   const handleCancel = () => {
