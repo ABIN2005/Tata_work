@@ -1,25 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import backgroundImage from '../assets/tata-steel.png'; // ✅ Make sure this file exists
-import WelcomePopup from '../Components/WelcomePopup'; // 🆕 Create this component
+import { useAppContext } from '../Context/AppContext';
+import backgroundImage from '../assets/tata-steel.png';
+import WelcomePopup from '../Components/WelcomePopup';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAppContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showWelcome, setShowWelcome] = useState(false); // 🆕
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [error, setError] = useState('');
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      const basename = import.meta.env.PROD ? '/DAMSBF' : '';
+      navigate(`${basename}/`);
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setError('');
+
     if (username === '0000' && password === '0000') {
+      // Create user data object
+      const userData = {
+        id: 1,
+        username: '0000',
+        email: 'demo@tata.com',
+        name: 'Demo User',
+        role: 'operator',
+      };
+
+      // Use AppContext login function
+      login(userData, 'demo_token_' + Date.now());
+      
+      // Also set legacy localStorage for compatibility
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('username', username);
-      setShowWelcome(true); // 🆕 Show welcome popup
+      
+      setShowWelcome(true);
       setTimeout(() => {
-        navigate('/BLT');
-      }, 2000); // ⏱️ Wait before navigating
+        const basename = import.meta.env.PROD ? '/DAMSBF' : '';
+        navigate(`${basename}/`);
+      }, 2000);
     } else {
-      alert('❌ Invalid username or password. Use 0000 / 0000');
+      setError('Invalid username or password. Use 0000 / 0000');
     }
   };
 
@@ -38,13 +66,22 @@ const LoginPage = () => {
             DAMS Login
           </h2>
 
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm text-center">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleLogin} autoComplete="off">
             <div className="mb-4">
               <input
                 type="text"
                 className="w-full p-3 rounded-lg bg-white/60 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setError('');
+                }}
                 required
                 placeholder="Username"
               />
@@ -55,7 +92,10 @@ const LoginPage = () => {
                 type="password"
                 className="w-full p-3 rounded-lg bg-white/60 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError('');
+                }}
                 required
                 placeholder="Password"
               />
@@ -68,8 +108,17 @@ const LoginPage = () => {
               Sign In
             </button>
 
+            <div className="mt-4 p-3 bg-blue-50/50 rounded-lg text-xs text-white">
+              <p className="font-semibold mb-1">Demo Credentials:</p>
+              <p>Username: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
+              <p>Password: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
+            </div>
+
             <p
-              onClick={() => navigate('/reset')}
+              onClick={() => {
+                const basename = import.meta.env.PROD ? '/DAMSBF' : '';
+                navigate(`${basename}/reset`);
+              }}
               className="text-center text-white mt-4 text-sm underline cursor-pointer hover:text-blue-300"
             >
               Forgot Password?
