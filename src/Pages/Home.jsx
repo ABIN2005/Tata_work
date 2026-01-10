@@ -369,25 +369,26 @@ function Home() {
                     unmountOnExit
                     timeout={350}
                   >
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        top: "100%",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        mt: { xs: 1, sm: 2 },
-                        minWidth: { xs: 'calc(100% - 16px)', sm: 200 },
-                        maxWidth: { xs: 'calc(100% - 16px)', sm: 250 },
-                        background: "rgba(255,255,255,0.95)",
-                        borderRadius: { xs: 2, sm: 4 },
-                        boxShadow: "0 8px 32px 0 rgba(253,160,133,0.3)",
-                        border: "2px solid #fda085",
-                        zIndex: 9999,
-                        py: { xs: 0.5, sm: 1 },
-                        px: { xs: 0.25, sm: 0.5 },
-                        backdropFilter: "blur(6px)",
-                      }}
-                    >
+                      <Box
+                        sx={{
+                          position: { xs: "relative", sm: "absolute" },
+                          top: { xs: "auto", sm: "100%" },
+                          left: { xs: "auto", sm: "50%" },
+                          transform: { xs: "none", sm: "translateX(-50%)" },
+                          mt: { xs: 2, sm: 2 },
+                          mx: { xs: "auto", sm: 0 },
+                          minWidth: { xs: '100%', sm: 200 },
+                          maxWidth: { xs: '100%', sm: 250 },
+                          background: "rgba(255,255,255,0.95)",
+                          borderRadius: { xs: 2, sm: 4 },
+                          boxShadow: "0 8px 32px 0 rgba(253,160,133,0.3)",
+                          border: "2px solid #fda085",
+                          zIndex: 9999,
+                          py: { xs: 1, sm: 1 },
+                          px: { xs: 1, sm: 0.5 },
+                          backdropFilter: "blur(6px)",
+                        }}
+                      >
                       <Box
                         sx={{
                           height: 4,

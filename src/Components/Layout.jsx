@@ -22,10 +22,14 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" && pr
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginTop: "64px",
+    marginTop: { xs: "56px", sm: "64px" },
     marginLeft: isMobile ? 0 : (open ? `${drawerWidth}px` : `${collapsedDrawerWidth}px`),
     [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(1.5),
+      marginLeft: 0,
+    },
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1),
       marginLeft: 0,
     },
     ...(open && !isMobile && {
@@ -170,8 +174,12 @@ function Layout() {
             width: '100%',
             height: '100%',
             overflow: 'auto',
+            maxWidth: '100%',
             [theme.breakpoints.down('sm')]: {
-              padding: theme.spacing(1),
+              padding: theme.spacing(0.5),
+            },
+            [theme.breakpoints.down('xs')]: {
+              padding: theme.spacing(0.25),
             },
           }}>
             <Outlet />

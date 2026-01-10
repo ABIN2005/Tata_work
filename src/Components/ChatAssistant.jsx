@@ -157,10 +157,12 @@ What specific help do you need?`;
         onClick={() => setOpen(true)}
         sx={{
           position: 'fixed',
-          bottom: 24,
-          right: 24,
+          bottom: { xs: 16, sm: 24 },
+          right: { xs: 16, sm: 24 },
           zIndex: 1000,
           backgroundColor: '#004C97',
+          width: { xs: 48, sm: 56 },
+          height: { xs: 48, sm: 56 },
           '&:hover': {
             backgroundColor: '#003366',
           },
@@ -178,7 +180,7 @@ What specific help do you need?`;
         PaperProps={{
           sx: {
             width: { xs: '100%', sm: 400 },
-            maxWidth: '100%',
+            maxWidth: { xs: '100vw', sm: '90vw' },
           },
         }}
       >
@@ -244,8 +246,8 @@ What specific help do you need?`;
                 <Paper
                   elevation={2}
                   sx={{
-                    p: 1.5,
-                    maxWidth: '75%',
+                    p: { xs: 1, sm: 1.5 },
+                    maxWidth: { xs: '85%', sm: '75%' },
                     backgroundColor: msg.sender === 'bot' ? '#e3f2fd' : '#004C97',
                     color: msg.sender === 'bot' ? '#000' : '#fff',
                     borderRadius: 2,
@@ -253,7 +255,7 @@ What specific help do you need?`;
                     wordBreak: 'break-word',
                   }}
                 >
-                  <Typography variant="body2">{msg.text}</Typography>
+                  <Typography variant="body2" sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>{msg.text}</Typography>
                 </Paper>
                 {msg.sender === 'user' && (
                   <Box

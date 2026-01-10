@@ -360,6 +360,7 @@ function Navbar({ handleDrawerToggle, isMobile = false }) {
           minWidth: { xs: '100%', sm: '120px', md: '160px' },
           maxWidth: { xs: '100%', sm: '200px', md: '300px' },
           order: { xs: -1, md: 0 },
+          mt: { xs: 1, sm: 0 },
         }}>
           <Search>
             <SearchIconWrapper>

@@ -54,29 +54,29 @@ const LoginPage = () => {
   return (
     <>
       <div
-        className="h-screen w-screen bg-cover bg-center flex items-center justify-center"
+        className="h-screen w-screen bg-cover bg-center flex items-center justify-center p-4"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        <div className="bg-white/20 backdrop-blur-md p-8 rounded-xl shadow-2xl w-96 border border-white/30">
-          <h2 className="text-3xl font-bold text-white text-center mb-6 drop-shadow-lg">
+        <div className="bg-white/20 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md md:w-96 border border-white/30">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-4 sm:mb-6 drop-shadow-lg">
             DAMS Login
           </h2>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm text-center">
+            <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-xs sm:text-sm text-center">
               {error}
             </div>
           )}
 
           <form onSubmit={handleLogin} autoComplete="off">
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <input
                 type="text"
-                className="w-full p-3 rounded-lg bg-white/60 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full p-2.5 sm:p-3 rounded-lg bg-white/60 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm sm:text-base"
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
@@ -87,10 +87,10 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <input
                 type="password"
-                className="w-full p-3 rounded-lg bg-white/60 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full p-2.5 sm:p-3 rounded-lg bg-white/60 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm sm:text-base"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -103,15 +103,15 @@ const LoginPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-200"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2.5 sm:py-3 px-4 rounded-full transition duration-200 text-sm sm:text-base"
             >
               Sign In
             </button>
 
-            <div className="mt-4 p-3 bg-blue-50/50 rounded-lg text-xs text-white">
+            <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-blue-50/50 rounded-lg text-xs sm:text-sm text-white">
               <p className="font-semibold mb-1">Demo Credentials:</p>
-              <p>Username: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
-              <p>Password: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
+              <p className="break-words">Username: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
+              <p className="break-words">Password: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
             </div>
 
             <p
@@ -119,7 +119,7 @@ const LoginPage = () => {
                 const basename = import.meta.env.PROD ? '/DAMSBF' : '';
                 navigate(`${basename}/reset`);
               }}
-              className="text-center text-white mt-4 text-sm underline cursor-pointer hover:text-blue-300"
+              className="text-center text-white mt-3 sm:mt-4 text-xs sm:text-sm underline cursor-pointer hover:text-blue-300"
             >
               Forgot Password?
             </p>

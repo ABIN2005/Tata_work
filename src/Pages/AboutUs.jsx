@@ -170,7 +170,7 @@ export default function AboutUs() {
         </Motion.div>
 
         {/* Features Grid */}
-        <Box sx={{ mb: { xs: 4, md: 6 } }}>
+        <Box sx={{ mb: { xs: 4, md: 6 }, px: { xs: 1, sm: 0 } }}>
           <Typography
             variant="h4"
             sx={{
@@ -183,9 +183,9 @@ export default function AboutUs() {
           >
             Key Features
           </Typography>
-          <Grid container spacing={3}>
+          <Grid container spacing={{ xs: 2, sm: 3, md: 3 }}>
             {features.map((feature, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
+              <Grid item xs={12} sm={6} md={6} lg={3} key={index}>
                 <Motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -247,7 +247,7 @@ export default function AboutUs() {
         </Box>
 
         {/* Tech Stack & Timeline Section */}
-        <Grid container spacing={4} sx={{ mb: { xs: 4, md: 6 } }}>
+        <Grid container spacing={{ xs: 3, sm: 4 }} sx={{ mb: { xs: 4, md: 6 }, px: { xs: 1, sm: 0 } }}>
           {/* Tech Stack Card */}
           <Grid item xs={12} md={6}>
             <Motion.div

@@ -34,11 +34,54 @@ html, body {
   min-height: 100vh;
   overflow-x: hidden;
   width: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Responsive Typography */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2em !important;
+  }
+  h2 {
+    font-size: 1.5em !important;
+  }
+  h3 {
+    font-size: 1.25em !important;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+* {
+  max-width: 100%;
+}
+
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch-friendly buttons on mobile */
+@media (max-width: 768px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 h1 {

@@ -231,25 +231,25 @@ const ChatBot = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl grid lg:grid-cols-[1.8fr_1fr] gap-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex items-center justify-center p-2 sm:p-4">
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-3 sm:gap-4">
         {/* Chat panel */}
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-6 h-[700px] flex flex-col relative overflow-hidden">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl p-3 sm:p-4 md:p-6 h-[600px] sm:h-[650px] md:h-[700px] flex flex-col relative overflow-hidden order-1 lg:order-none">
           {/* Animated background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5 animate-pulse pointer-events-none" />
           
           {/* Header */}
-          <div className="flex items-center gap-3 mb-4 relative z-10 pb-4 border-b border-white/10">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-cyan-500/30 to-emerald-500/30 border-2 border-cyan-400/50 flex items-center justify-center shadow-lg">
-              <Sparkles size={20} className="text-cyan-300 animate-pulse" />
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 relative z-10 pb-3 sm:pb-4 border-b border-white/10">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-cyan-500/30 to-emerald-500/30 border-2 border-cyan-400/50 flex items-center justify-center shadow-lg shrink-0">
+              <Sparkles size={18} className="sm:w-5 sm:h-5 text-cyan-300 animate-pulse" />
             </div>
-            <div className="flex-1">
-              <h2 className="text-xl font-bold leading-tight bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg sm:text-xl font-bold leading-tight bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent truncate">
                 DAMSBF Assistant
               </h2>
               <p className="text-xs text-slate-300 flex items-center gap-1 mt-0.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                Online • Ready to help
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span className="truncate">Online • Ready to help</span>
               </p>
             </div>
           </div>
@@ -341,11 +341,11 @@ const ChatBot = () => {
 
           {/* Input area */}
           <div className="relative z-10">
-            <div className="flex gap-2 items-end">
+            <div className="flex gap-1.5 sm:gap-2 items-end">
               <div className="flex-1 relative">
                 <textarea
                   ref={inputRef}
-                  className="w-full rounded-2xl px-4 py-3 pr-12 text-black bg-white/95 focus:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-400 resize-none min-h-[48px] max-h-[120px] text-sm"
+                  className="w-full rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2 sm:py-3 pr-10 sm:pr-12 text-black bg-white/95 focus:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-400 resize-none min-h-[44px] sm:min-h-[48px] max-h-[120px] text-sm"
                   value={input}
                   onChange={(e) => {
                     setInput(e.target.value);
@@ -358,40 +358,40 @@ const ChatBot = () => {
                       onSendClick();
                     }
                   }}
-                  placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
+                  placeholder="Type your message..."
                   rows={1}
                 />
-                <div className="absolute right-3 bottom-3 text-xs text-slate-500">
+                <div className="absolute right-2 sm:right-3 bottom-2 sm:bottom-3 text-xs text-slate-500 hidden sm:block">
                   {input.length > 0 && `${input.length} chars`}
                 </div>
               </div>
               <button
                 onClick={onSendClick}
                 disabled={loading || !input.trim()}
-                className="bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-700 hover:to-emerald-700 transition-all text-white px-5 py-3 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+                className="bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-700 hover:to-emerald-700 transition-all text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 sm:gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 shrink-0 min-h-[44px] sm:min-h-[48px]"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="animate-spin" size={18} />
+                    <Loader2 className="animate-spin" size={16} className="sm:w-[18px] sm:h-[18px]" />
                     <span className="hidden sm:inline">Sending</span>
                   </>
                 ) : (
                   <>
-                    <Send size={18} />
+                    <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
                     <span className="hidden sm:inline">Send</span>
                   </>
                 )}
               </button>
             </div>
-            <div className="flex items-center justify-between mt-2 text-xs text-slate-400">
-              <span>💡 Tip: Ask about login, navigation, or system status</span>
-              <span>Press Enter to send</span>
+            <div className="flex items-center justify-between mt-1.5 sm:mt-2 text-xs text-slate-400">
+              <span className="hidden sm:inline">💡 Tip: Ask about login, navigation, or system status</span>
+              <span className="text-[10px] sm:text-xs">Press Enter to send</span>
             </div>
           </div>
         </div>
 
         {/* Sidebar */}
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-6 space-y-5 h-[700px] overflow-y-auto scrollbar-thin scrollbar-thumb-cyan-500/50">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-5 h-auto sm:h-[600px] md:h-[700px] overflow-y-auto scrollbar-thin scrollbar-thumb-cyan-500/50 order-2 lg:order-none">
           {/* Status cards */}
           <div className="space-y-3">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 border border-emerald-400/30">
