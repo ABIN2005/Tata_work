@@ -5,6 +5,32 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+    <script>
+      // Pre-check authentication before React loads
+      // This ensures immediate redirect without waiting for React to mount
+      (function() {
+        // Get current path
+        const currentPath = window.location.pathname;
+        const basename = currentPath.includes('/DAMSBF') ? '/DAMSBF' : '';
+        const loginPath = basename + '/login';
+        
+        // Skip check if already on login page or public routes
+        const publicRoutes = ['/login', '/signout', '/reset', '/signedout'];
+        const isPublicRoute = publicRoutes.some(route => currentPath.endsWith(route));
+        
+        if (!isPublicRoute) {
+          // Check sessionStorage for authentication
+          const storedUser = sessionStorage.getItem('user');
+          const storedToken = sessionStorage.getItem('authToken');
+          const isAuthenticated = !!(storedUser && storedToken);
+          
+          // If not authenticated, redirect immediately to login
+          if (!isAuthenticated) {
+            window.location.replace(loginPath);
+          }
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

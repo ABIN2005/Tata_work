@@ -4,24 +4,35 @@ import { tokenManager } from '../Services/api';
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
-  // Initialize state from localStorage if available
+  // Initialize state from sessionStorage (tab-specific) for auth, localStorage for theme
   const [state, setState] = useState(() => {
     try {
-      const savedUser = localStorage.getItem('user');
+      // Use sessionStorage for user data (tab-specific)
+      const savedUser = sessionStorage.getItem('user');
+      // Use localStorage for theme (persists across tabs)
       const savedTheme = localStorage.getItem('theme') || 'light';
       const token = tokenManager.getToken();
+      
+      // Generate or retrieve session ID for this tab
+      let sessionId = sessionStorage.getItem('sessionId');
+      if (!sessionId) {
+        sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        sessionStorage.setItem('sessionId', sessionId);
+      }
       
       return {
         user: savedUser ? JSON.parse(savedUser) : null,
         isAuthenticated: !!token && !!savedUser,
         theme: savedTheme,
+        sessionId: sessionId,
       };
     } catch (error) {
-      console.warn('Failed to load state from localStorage:', error);
+      console.warn('Failed to load state from storage:', error);
       return {
         user: null,
         isAuthenticated: false,
         theme: 'light',
+        sessionId: null,
       };
     }
   });
@@ -37,20 +48,28 @@ export function AppProvider({ children }) {
 
   const login = (userData, token = null) => {
     try {
-      // Save user data and token
+      // Save user data and token to sessionStorage (tab-specific)
       if (token) {
         tokenManager.setToken(token);
       }
-      localStorage.setItem('user', JSON.stringify(userData));
+      sessionStorage.setItem('user', JSON.stringify(userData));
+      
+      // Generate session ID for this tab if not exists
+      let sessionId = sessionStorage.getItem('sessionId');
+      if (!sessionId) {
+        sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        sessionStorage.setItem('sessionId', sessionId);
+      }
       
       setState({
         ...state,
         user: userData,
         isAuthenticated: true,
+        sessionId: sessionId,
       });
     } catch (error) {
       console.error('Failed to save login data:', error);
-      // Still update state even if localStorage fails
+      // Still update state even if sessionStorage fails
       setState({
         ...state,
         user: userData,
@@ -61,22 +80,28 @@ export function AppProvider({ children }) {
 
   const logout = () => {
     try {
-      // Clear token and user data
+      // Clear token and user data from sessionStorage
       tokenManager.clearToken();
-      localStorage.removeItem('user');
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('sessionId');
+      // Also clear legacy localStorage items
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('username');
       
       setState({
         ...state,
         user: null,
         isAuthenticated: false,
+        sessionId: null,
       });
     } catch (error) {
       console.error('Failed to clear logout data:', error);
-      // Still update state even if localStorage fails
+      // Still update state even if sessionStorage fails
       setState({
         ...state,
         user: null,
         isAuthenticated: false,
+        sessionId: null,
       });
     }
   };

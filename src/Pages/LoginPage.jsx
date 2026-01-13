@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../Context/AppContext';
 import backgroundImage from '../assets/tata-steel.png';
 import WelcomePopup from '../Components/WelcomePopup';
+import authData from '../data/auth.json';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,22 +25,26 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
 
-    if (username === '0000' && password === '0000') {
-      // Create user data object
+    // Find user in the hard-coded JSON file
+    const user = authData.users.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (user) {
+      // Create user data object (without password)
       const userData = {
-        id: 1,
-        username: '0000',
-        email: 'demo@tata.com',
-        name: 'Demo User',
-        role: 'operator',
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        permissions: user.permissions,
       };
 
       // Use AppContext login function
-      login(userData, 'demo_token_' + Date.now());
+      login(userData, `auth_token_${user.username}_${Date.now()}`);
       
-      // Also set legacy localStorage for compatibility
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('username', username);
+      // Note: No longer using localStorage for auth (using sessionStorage for tab-specific sessions)
       
       setShowWelcome(true);
       setTimeout(() => {
@@ -47,7 +52,7 @@ const LoginPage = () => {
         navigate(`${basename}/`);
       }, 2000);
     } else {
-      setError('Invalid username or password. Use 0000 / 0000');
+      setError('Invalid username or password. Please check your credentials.');
     }
   };
 
@@ -109,9 +114,9 @@ const LoginPage = () => {
             </button>
 
             <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-blue-50/50 rounded-lg text-xs sm:text-sm text-white">
-              <p className="font-semibold mb-1">Demo Credentials:</p>
-              <p className="break-words">Username: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
-              <p className="break-words">Password: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
+              <p className="font-semibold mb-1">Available Credentials:</p>
+              <p className="break-words">Demo: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code> / <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">0000</code></p>
+              <p className="break-words">Admin: <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">admin</code> / <code className="bg-blue-200/50 px-1.5 py-0.5 rounded">admin</code></p>
             </div>
 
             <p

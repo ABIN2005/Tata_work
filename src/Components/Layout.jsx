@@ -1,12 +1,13 @@
 // src/components/Layout.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import ChatAssistant from "./ChatAssistant";
 import { Box, CssBaseline, styled, useMediaQuery, useTheme, Drawer as MuiDrawer } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import MainSidebar from "./MainSidebar";
 import SectionSidebar from "./SectionSidebar";
+import { useAppContext } from "../Context/AppContext";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -98,6 +99,29 @@ function Layout() {
   const [open, setOpen] = useState(!isMobile); // Default to open on desktop, closed on mobile
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { logout } = useAppContext();
+  const basename = import.meta.env.PROD ? '/DAMSBF' : '';
+
+  // Check authentication synchronously before rendering
+  const storedUser = sessionStorage.getItem('user');
+  const storedToken = sessionStorage.getItem('authToken');
+  const isAuth = !!(storedUser && storedToken);
+
+  // Immediate authentication check on mount - redirect before rendering Layout
+  useEffect(() => {
+    if (!isAuth) {
+      // Clear any stale state
+      logout();
+      // Immediate redirect to login using replace (prevents back button)
+      const loginPath = `${basename}/login`.replace('//', '/');
+      window.location.replace(loginPath);
+    }
+  }, [isAuth, logout, basename]);
+
+  // Don't render Layout if not authenticated (will redirect)
+  if (!isAuth) {
+    return null;
+  }
 
   const handleDrawerToggle = () => {
     if (isMobile) {

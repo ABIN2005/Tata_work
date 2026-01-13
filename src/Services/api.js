@@ -6,10 +6,10 @@ const REQUEST_TIMEOUT = 30000; // 30 seconds
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second base delay
 
-// Token management utilities
+// Token management utilities - Using sessionStorage for tab-specific sessions
 const getAuthToken = () => {
   try {
-    return localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    return sessionStorage.getItem('authToken');
   } catch (error) {
     console.warn('Failed to get auth token:', error);
     return null;
@@ -19,9 +19,8 @@ const getAuthToken = () => {
 const setAuthToken = (token) => {
   try {
     if (token) {
-      localStorage.setItem('authToken', token);
+      sessionStorage.setItem('authToken', token);
     } else {
-      localStorage.removeItem('authToken');
       sessionStorage.removeItem('authToken');
     }
   } catch (error) {
