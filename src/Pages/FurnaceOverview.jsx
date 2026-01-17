@@ -133,18 +133,47 @@ const FurnaceOverview = () => {
   };
 
   return (
-    <Box p={2} sx={{ pt: 0 }}>
-      <Box sx={{ backgroundColor: '#f0f0f0', px: 2, py: 0.5, borderRadius: 2, mt: 0, mb: 1 }}>
-        <Typography variant="h5" fontWeight="bold" color="#111">
+    <Box 
+      p={{ xs: 1, sm: 1.5, md: 2 }} 
+      sx={{ 
+        pt: 0,
+        width: '100%',
+        maxWidth: '100%',
+        overflowX: 'hidden',
+      }}
+    >
+      <Box sx={{ 
+        backgroundColor: '#f0f0f0', 
+        px: { xs: 1, sm: 1.5, md: 2 }, 
+        py: 0.5, 
+        borderRadius: 2, 
+        mt: 0, 
+        mb: 1 
+      }}>
+        <Typography 
+          variant="h5" 
+          fontWeight="bold" 
+          color="#111"
+          sx={{
+            fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' },
+          }}
+        >
           FURNACE OVERVIEW
         </Typography>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={{ xs: 1, sm: 1.5, md: 2 }}>
         {/* LEFT PARAMETERS */}
-        <Grid item xs={12} md={3}>
-          <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: 2 }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
+        <Grid item xs={12} sm={12} md={3}>
+          <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: { xs: 1, sm: 1.5, md: 2 } }}>
+            <Typography 
+              variant="h6" 
+              fontWeight="bold" 
+              gutterBottom
+              sx={{
+                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' },
+              }}
+            >
               PARAMETERS
             </Typography>
             {leftParameters.map((param, i) => (
@@ -154,29 +183,29 @@ const FurnaceOverview = () => {
         </Grid>
 
         {/* CENTER IMAGE AND CENTER PARAMETERS */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Box
             sx={{
               height: '100%',
               border: '1px solid #ccc',
               borderRadius: 2,
-              p: 2,
+              p: { xs: 1, sm: 1.5, md: 2 },
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              minHeight: '600px',
+              minHeight: { xs: 'auto', sm: '500px', md: '600px' },
             }}
           >
             <Box
               sx={{
-                mt: -2,
+                mt: { xs: 0, sm: -2 },
                 mb: 1.5,
                 width: '100%',
-                maxWidth: 600,
+                maxWidth: { xs: '100%', sm: 500, md: 600 },
                 backgroundColor: '#f5f5f5',
                 border: '1px solid #ddd',
                 borderRadius: 2,
-                p: 1,
+                p: { xs: 0.5, sm: 1 },
               }}
             >
               <OM />
@@ -189,16 +218,16 @@ const FurnaceOverview = () => {
                 alt="Furnace Diagram"
                 sx={{
                   width: '100%',
-                  maxHeight: '400px',
+                  maxHeight: { xs: '250px', sm: '300px', md: '400px' },
                   objectFit: 'contain',
                   borderRadius: 2,
-                  mt: -1.5,
+                  mt: { xs: 0, sm: -1.5 },
                 }}
               />
             </Box>
 
-            <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: 2, mt: 2, width: '100%' }}>
-              <Grid container spacing={2}>
+            <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: { xs: 1, sm: 1.5, md: 2 }, mt: 2, width: '100%' }}>
+              <Grid container spacing={{ xs: 1, sm: 1.5, md: 2 }}>
                 {centerParameters.map((param, index) => (
                   <Grid item xs={6} sm={6} md={3} key={index}>
                     <ParameterCard {...param} onClick={() => handleCardClick(param.name)} />
@@ -210,10 +239,28 @@ const FurnaceOverview = () => {
         </Grid>
 
         {/* RIGHT PARAMETERS + ALERTS */}
-        <Grid item xs={12} md={3}>
-          <Box sx={{ display: 'flex', height: '100%', gap: 2 }}>
-            <Box sx={{ flex: 1, border: '1px solid #aaa', borderRadius: 2, p: 2 }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
+        <Grid item xs={12} sm={12} md={3}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: { xs: 'column', md: 'row' },
+            height: '100%', 
+            gap: { xs: 1, sm: 1.5, md: 2 } 
+          }}>
+            <Box sx={{ 
+              flex: 1, 
+              border: '1px solid #aaa', 
+              borderRadius: 2, 
+              p: { xs: 1, sm: 1.5, md: 2 },
+              width: { xs: '100%', md: 'auto' },
+            }}>
+              <Typography 
+                variant="h6" 
+                fontWeight="bold" 
+                gutterBottom
+                sx={{
+                  fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' },
+                }}
+              >
                 PARAMETERS
               </Typography>
               {rightParameters.map((param, i) => (
@@ -221,9 +268,14 @@ const FurnaceOverview = () => {
               ))}
             </Box>
 
-            <Box sx={{ minWidth: 240, maxWidth: 260, display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ 
+              minWidth: { xs: '100%', md: 240 }, 
+              maxWidth: { xs: '100%', md: 260 }, 
+              display: 'flex', 
+              flexDirection: 'column' 
+            }}>
               <OLP />
-              <Box sx={{ mt: 1, minHeight: 220 }}>
+              <Box sx={{ mt: 1, minHeight: { xs: 'auto', sm: 220 } }}>
                 <AlertBarGraph />
               </Box>
               <Box sx={{ mt: 2 }}>

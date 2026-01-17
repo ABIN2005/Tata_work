@@ -115,17 +115,47 @@ const HotBlast = () => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   return (
-    <Box p={2}>
-      <Box sx={{ backgroundColor: '#f0f0f0', px: 2, py: 0.5, borderRadius: 2, mb: 2 }}>
-        <Typography variant="h5" fontWeight="bold">HOT BLAST SYSTEM</Typography>
+    <Box 
+      p={{ xs: 1, sm: 1.5, md: 2 }}
+      sx={{
+        width: '100%',
+        maxWidth: '100%',
+        overflowX: 'hidden',
+      }}
+    >
+      <Box sx={{ 
+        backgroundColor: '#f0f0f0', 
+        px: { xs: 1, sm: 1.5, md: 2 }, 
+        py: 0.5, 
+        borderRadius: 2, 
+        mb: 2 
+      }}>
+        <Typography 
+          variant="h5" 
+          fontWeight="bold"
+          sx={{
+            fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' },
+          }}
+        >
+          HOT BLAST SYSTEM
+        </Typography>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={{ xs: 1, sm: 1.5, md: 2 }}>
         {/* Left Parameters */}
-        <Grid item xs={12} md={3}>
-          <Box sx={{ maxWidth: 300, width: '100%' }}>
-            <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: 1 }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>PARAMETERS</Typography>
+        <Grid item xs={12} sm={12} md={3}>
+          <Box sx={{ maxWidth: { xs: '100%', md: 300 }, width: '100%' }}>
+            <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: { xs: 1, sm: 1.5, md: 1 } }}>
+              <Typography 
+                variant="h6" 
+                fontWeight="bold" 
+                gutterBottom
+                sx={{
+                  fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' },
+                }}
+              >
+                PARAMETERS
+              </Typography>
               {leftParameters.map((param, i) => (
                 <ParameterCard key={i} {...param} onClick={() => handleCardClick(param)} index={i} />
               ))}
@@ -134,17 +164,17 @@ const HotBlast = () => {
         </Grid>
 
         {/* Center Content */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Box
             sx={{
               height: '100%',
               border: '1px solid #ccc',
               borderRadius: 2,
-              p: 2,
+              p: { xs: 1, sm: 1.5, md: 2 },
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              minHeight: '600px',
+              minHeight: { xs: 'auto', sm: '500px', md: '600px' },
             }}
           >
             {/* Operation and Maintenance */}

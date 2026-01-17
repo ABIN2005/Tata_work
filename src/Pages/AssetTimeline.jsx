@@ -47,15 +47,15 @@ const AssetTimeline = () => {
     : events;
 
   return (
-    <div className="p-6 min-h-screen bg-[#0B1E3A] text-white">
-      <h2 className="text-2xl font-bold mb-4">Asset Event Timeline</h2>
+    <div className="p-3 sm:p-4 md:p-6 min-h-screen bg-[#0B1E3A] text-white w-full max-w-full overflow-x-hidden">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">Asset Event Timeline</h2>
 
       {/* Entry + Summary Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
         {/* Add Event Form */}
-        <div className="bg-[#E6E6FA] text-black p-4 rounded shadow">
-          <h3 className="font-semibold mb-2">Add Event</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-[#E6E6FA] text-black p-3 sm:p-4 rounded shadow w-full">
+          <h3 className="font-semibold mb-2 text-sm sm:text-base">Add Event</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <input type="date" name="date" value={newEvent.date} onChange={handleEventChange} className="p-2 border rounded" required />
             <input type="text" name="area" placeholder="Area" value={newEvent.area} onChange={handleEventChange} className="p-2 border rounded" />
             <select name="type" value={newEvent.type} onChange={handleEventChange} className="p-2 border rounded">
@@ -71,8 +71,8 @@ const AssetTimeline = () => {
         </div>
 
         {/* Summary Chart */}
-        <div className="bg-white text-black p-4 rounded shadow">
-          <h3 className="font-semibold mb-2">Event Summary</h3>
+        <div className="bg-white text-black p-3 sm:p-4 rounded shadow w-full">
+          <h3 className="font-semibold mb-2 text-sm sm:text-base">Event Summary</h3>
           {summaryData.length ? (
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>

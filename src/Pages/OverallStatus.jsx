@@ -93,18 +93,43 @@ const OverallStatus = () => {
   ), []);
 
   return (
-    <Box p={3}>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6" gutterBottom>
+    <Box 
+      p={{ xs: 1.5, sm: 2, md: 3 }}
+      sx={{
+        width: '100%',
+        maxWidth: '100%',
+        overflowX: 'hidden',
+      }}
+    >
+      <Box 
+        display="flex" 
+        flexDirection={{ xs: 'column', sm: 'row' }}
+        justifyContent="space-between" 
+        alignItems={{ xs: 'flex-start', sm: 'center' }}
+        gap={{ xs: 1, sm: 0 }}
+      >
+        <Typography 
+          variant="h6" 
+          gutterBottom
+          sx={{
+            fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' },
+          }}
+        >
           BLT: OVERALL STATUS
         </Typography>
-        <Typography variant="body2" align="right">
+        <Typography 
+          variant="body2" 
+          align={{ xs: 'left', sm: 'right' }}
+          sx={{
+            fontSize: { xs: '0.75rem', sm: '0.875rem' },
+          }}
+        >
           Last Model Run Time :- {currentTime}
         </Typography>
       </Box>
 
-      <Grid container spacing={2} alignItems="center" mt={2}>
-        <Grid item xs={12} md={2}>
+      <Grid container spacing={{ xs: 1.5, sm: 2 }} alignItems="center" mt={2}>
+        <Grid item xs={12} sm={6} md={2}>
           <FormControl fullWidth>
             <Select value={plant} onChange={(e) => setPlant(e.target.value)}>
               <MenuItem value="BLT">BLT</MenuItem>
@@ -112,7 +137,7 @@ const OverallStatus = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <DateTimePicker
             label="From Date"
             value={fromDate}
@@ -121,7 +146,7 @@ const OverallStatus = () => {
           />
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <DateTimePicker
             label="To Date"
             value={toDate}
@@ -130,16 +155,22 @@ const OverallStatus = () => {
           />
         </Grid>
 
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} sm={6} md={2}>
           <Button variant="contained" color="primary" fullWidth>
             Load Data
           </Button>
         </Grid>
       </Grid>
 
-      <Box mt={1} display="flex" justifyContent="flex-end">
-        <Paper elevation={3} sx={{ p: 2, width: '100%', maxWidth: 260 }}>
-          <Typography variant="subtitle1" gutterBottom>
+      <Box mt={1} display="flex" justifyContent={{ xs: 'flex-start', sm: 'flex-end' }}>
+        <Paper elevation={3} sx={{ p: { xs: 1.5, sm: 2 }, width: '100%', maxWidth: { xs: '100%', sm: 260 } }}>
+          <Typography 
+            variant="subtitle1" 
+            gutterBottom
+            sx={{
+              fontSize: { xs: '0.875rem', sm: '1rem' },
+            }}
+          >
             Scenario
           </Typography>
           <Box display="flex" flexWrap="wrap" gap={1}>
@@ -155,26 +186,32 @@ const OverallStatus = () => {
                   />
                 }
                 label={key.charAt(0).toUpperCase() + key.slice(1)}
-                sx={{ mr: 1 }}
+                sx={{ mr: 1, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               />
             ))}
           </Box>
         </Paper>
       </Box>
 
-      <Box mt={1} display="flex" justifyContent="flex-end" gap={2}>
-        <Button variant="contained" color="success" size="small">
+      <Box mt={1} display="flex" flexWrap="wrap" justifyContent={{ xs: 'flex-start', sm: 'flex-end' }} gap={2}>
+        <Button variant="contained" color="success" size="small" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
           SCATTER CHART
         </Button>
-        <Button variant="contained" color="info" size="small">
+        <Button variant="contained" color="info" size="small" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
           COMPARE PANEL
         </Button>
       </Box>
 
-      <Grid container spacing={2} mt={0}>
+      <Grid container spacing={{ xs: 1.5, sm: 2 }} mt={0}>
         <Grid item xs={12} md={9}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="subtitle2" mb={1}>
+          <Paper elevation={3} sx={{ p: { xs: 1.5, sm: 2 }, width: '100%', overflowX: 'auto' }}>
+            <Typography 
+              variant="subtitle2" 
+              mb={1}
+              sx={{
+                fontSize: { xs: '0.875rem', sm: '1rem' },
+              }}
+            >
               Health Timeline
             </Typography>
             <ScatterChartComponent />

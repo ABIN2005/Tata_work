@@ -78,29 +78,80 @@ const HealthStatus = () => {
   });
 
   return (
-    <Box p={2}>
-      <Typography variant="h6" align="center" gutterBottom>
+    <Box 
+      p={{ xs: 1, sm: 1.5, md: 2 }}
+      sx={{
+        width: '100%',
+        maxWidth: '100%',
+        overflowX: 'hidden',
+      }}
+    >
+      <Typography 
+        variant="h6" 
+        align="center" 
+        gutterBottom
+        sx={{
+          fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' },
+        }}
+      >
         BLT: HEALTH STATUS
       </Typography>
-      <Box display="flex" justifyContent="flex-end" pr={2}>
-        <Typography variant="body2">
+      <Box 
+        display="flex" 
+        justifyContent={{ xs: 'flex-start', sm: 'flex-end' }} 
+        pr={{ xs: 0, sm: 2 }}
+        mt={{ xs: 1, sm: 0 }}
+      >
+        <Typography 
+          variant="body2"
+          sx={{
+            fontSize: { xs: '0.7rem', sm: '0.875rem' },
+          }}
+        >
           Last Model Run Time :- {currentTime} &nbsp;&nbsp; {today}
         </Typography>
       </Box>
 
       {/* Buttons above left table */}
-      <Box mt={2} mb={1} display="flex" justifyContent="flex-start" gap={2}>
-        <Button variant="contained" color="primary">
+      <Box 
+        mt={2} 
+        mb={1} 
+        display="flex" 
+        flexWrap="wrap"
+        justifyContent={{ xs: 'center', sm: 'flex-start' }} 
+        gap={2}
+      >
+        <Button 
+          variant="contained" 
+          color="primary"
+          sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+        >
           Equipment Status
         </Button>
-        <Button variant="contained" color="primary">
+        <Button 
+          variant="contained" 
+          color="primary"
+          sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+        >
           Forecast
         </Button>
       </Box>
 
-      <Box display="flex" justifyContent="center" gap={2}>
+      <Box 
+        display="flex" 
+        flexDirection={{ xs: 'column', md: 'row' }}
+        justifyContent="center" 
+        gap={2}
+        sx={{ width: '100%' }}
+      >
         {/* Equipment Status Table */}
-        <Paper elevation={3} sx={{ width: '22%' }}>
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            width: { xs: '100%', md: '22%' },
+            overflowX: 'auto',
+          }}
+        >
           <TableContainer>
             <Table size="small">
               <TableHead>
@@ -134,11 +185,11 @@ const HealthStatus = () => {
         <Paper
           elevation={3}
           sx={{
-            width: '32%',
+            width: { xs: '100%', md: '32%' },
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            p: 2,
+            p: { xs: 1, sm: 1.5, md: 2 },
           }}
         >
           <img
@@ -147,6 +198,7 @@ const HealthStatus = () => {
             style={{
               width: '100%',
               maxHeight: '400px',
+              height: 'auto',
               objectFit: 'contain',
             }}
           />

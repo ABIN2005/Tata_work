@@ -103,16 +103,46 @@ const TuyereNose = () => {
   };
 
   return (
-    <Box p={2}>
-      <Box sx={{ backgroundColor: '#f0f0f0', px: 2, py: 0.5, borderRadius: 2, mb: 2 }}>
-        <Typography variant="h5" fontWeight="bold">TUYERE NOSE SYSTEM-1</Typography>
+    <Box 
+      p={{ xs: 1, sm: 1.5, md: 2 }}
+      sx={{
+        width: '100%',
+        maxWidth: '100%',
+        overflowX: 'hidden',
+      }}
+    >
+      <Box sx={{ 
+        backgroundColor: '#f0f0f0', 
+        px: { xs: 1, sm: 1.5, md: 2 }, 
+        py: 0.5, 
+        borderRadius: 2, 
+        mb: 2 
+      }}>
+        <Typography 
+          variant="h5" 
+          fontWeight="bold"
+          sx={{
+            fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' },
+          }}
+        >
+          TUYERE NOSE SYSTEM-2
+        </Typography>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={{ xs: 1, sm: 1.5, md: 2 }}>
         {/* Left */}
-        <Grid item xs={12} md={3}>
-          <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: 2 }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>INLET FLOW</Typography>
+        <Grid item xs={12} sm={12} md={3}>
+          <Box sx={{ border: '1px solid #aaa', borderRadius: 2, p: { xs: 1, sm: 1.5, md: 2 } }}>
+            <Typography 
+              variant="h6" 
+              fontWeight="bold" 
+              gutterBottom
+              sx={{
+                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' },
+              }}
+            >
+              INLET FLOW
+            </Typography>
             {leftParameters.map((param, i) => (
               <ParameterCard
                 key={i}
@@ -125,20 +155,66 @@ const TuyereNose = () => {
         </Grid>
 
         {/* Center */}
-        <Grid item xs={12} md={6}>
-          <Box sx={{ height: '100%', border: '1px solid #ccc', borderRadius: 2, p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box sx={{ width: '100%', maxWidth: 600, backgroundColor: '#f5f5f5', border: '1px solid #ddd', borderRadius: 2, p: 1, mb: 2 }}>
+        <Grid item xs={12} sm={12} md={6}>
+          <Box sx={{ 
+            height: '100%', 
+            border: '1px solid #ccc', 
+            borderRadius: 2, 
+            p: { xs: 1, sm: 1.5, md: 2 }, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center' 
+          }}>
+            <Box sx={{ 
+              width: '100%', 
+              maxWidth: { xs: '100%', sm: 500, md: 600 }, 
+              backgroundColor: '#f5f5f5', 
+              border: '1px solid #ddd', 
+              borderRadius: 2, 
+              p: { xs: 0.5, sm: 1 }, 
+              mb: 2 
+            }}>
               <OM />
             </Box>
-            <Box component="img" src={furnaceImage} alt="Furnace" sx={{ width: '100%', maxHeight: '400px', objectFit: 'contain', borderRadius: 2 }} />
+            <Box 
+              component="img" 
+              src={furnaceImage} 
+              alt="Furnace" 
+              sx={{ 
+                width: '100%', 
+                maxHeight: { xs: '250px', sm: '300px', md: '400px' }, 
+                objectFit: 'contain', 
+                borderRadius: 2 
+              }} 
+            />
           </Box>
         </Grid>
 
         {/* Right */}
-        <Grid item xs={12} md={3}>
-          <Box sx={{ display: 'flex', height: '100%', gap: 2 }}>
-            <Box sx={{ flex: 1, border: '1px solid #aaa', borderRadius: 2, p: 2 }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>OUTLET FLOW</Typography>
+        <Grid item xs={12} sm={12} md={3}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: { xs: 'column', md: 'row' },
+            height: '100%', 
+            gap: { xs: 1, sm: 1.5, md: 2 } 
+          }}>
+            <Box sx={{ 
+              flex: 1, 
+              border: '1px solid #aaa', 
+              borderRadius: 2, 
+              p: { xs: 1, sm: 1.5, md: 2 },
+              width: { xs: '100%', md: 'auto' },
+            }}>
+              <Typography 
+                variant="h6" 
+                fontWeight="bold" 
+                gutterBottom
+                sx={{
+                  fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' },
+                }}
+              >
+                OUTLET FLOW
+              </Typography>
               {rightParameters.map((param, i) => (
                 <ParameterCard
                   key={i}
@@ -149,9 +225,14 @@ const TuyereNose = () => {
               ))}
             </Box>
 
-            <Box sx={{ minWidth: 240, maxWidth: 260, display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ 
+              minWidth: { xs: '100%', md: 240 }, 
+              maxWidth: { xs: '100%', md: 260 }, 
+              display: 'flex', 
+              flexDirection: 'column' 
+            }}>
               <OLP />
-              <Box sx={{ mt: 1, minHeight: 220 }}><AlertBarGraph /></Box>
+              <Box sx={{ mt: 1, minHeight: { xs: 'auto', sm: 220 } }}><AlertBarGraph /></Box>
               <Box sx={{ mt: 2 }}>
                 <RecentAlarm
                   alerts={[
